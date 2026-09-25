@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "epithet",
+  "version": "${version}",
+  "name": "Epithet",
+  "description": "A vanilla-styled player title and epithet management mod.",
+  "authors": [
+    "Developer"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Visio-Vanitas/epithet",
+    "sources": "https://github.com/Visio-Vanitas/epithet"
+  },
+  "license": "MIT",
+  "icon": "assets/epithet/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "top.atdove.epithet.fabric.EpithetFabric"
+    ],
+    "client": [
+      "top.atdove.epithet.fabric.client.EpithetClientFabric"
+    ]
+  },
+  "mixins": [
+    "epithet.common.mixins.json",
+    {
+      "config": "epithet.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "~1.21.1",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

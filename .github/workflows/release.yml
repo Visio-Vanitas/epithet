@@ -39,11 +39,29 @@ jobs:
       - name: Build Mod Release Jar
         run: ./gradlew build
 
-      - name: Generate Checksums
-        working-directory: build/libs
+      - name: Stage Multi-Platform Release Artifacts
         run: |
+          mkdir -p release_artifacts
+          # 1. 挂载标准 NeoForge 1.21.1 工件
+          for jar in build/libs/*.jar; do
+            if [ -f "$jar" ]; then
+              cp "$jar" "release_artifacts/epithet-neoforge-1.21.1-1.1.0.jar"
+            fi
+          done
+
+          # 2. 打包生成 Fabric 1.21.1 独立工件
+          mkdir -p build/fabric_staging
+          cp -r fabric/src/main/resources/* build/fabric_staging/
+          if [ -d build/classes/java/main ]; then
+            cp -r build/classes/java/main/* build/fabric_staging/
+          fi
+          cd build/fabric_staging && jar -cf ../../release_artifacts/epithet-fabric-1.21.1-1.1.0.jar * && cd ../..
+
+          # 3. 生成全平台工件 SHA-256 校验清单
+          cd release_artifacts
           sha256sum *.jar > checksums.txt
           cat checksums.txt
+          cd ..
 
       - name: Determine Release Tag
         id: tag_info
@@ -58,12 +76,12 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.tag_info.outputs.tag }}
-          name: Epithet ${{ steps.tag_info.outputs.tag }}
+          name: Epithet ${{ steps.tag_info.outputs.tag }} (Multi-Platform)
           draft: false
           prerelease: false
           generate_release_notes: true
           files: |
-            build/libs/*.jar
-            build/libs/checksums.txt
+            release_artifacts/*.jar
+            release_artifacts/checksums.txt
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
