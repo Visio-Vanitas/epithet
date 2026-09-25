@@ -1,0 +1,123 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.78'
+    id 'com.diffplug.spotless' version '6.25.0'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    // Additional mod dependencies can be added here
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.withType(ProcessResources).configureEach {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand replaceProperties
+    }
+}
+
+// Industry Standard Code Formatting (Spotless)
+spotless {
+    java {
+        target 'src/main/java/**/*.java'
+        toggleOffOn()
+        importOrder('net.minecraft', 'com.mojang', 'net.neoforged', '', 'java', 'javax', '\\#')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+// Optional Local Code Style & Clean Imports Tasks
+tasks.register('formatImports', Exec) {
+    group = 'formatting'
+    description = 'Automatically extracts in-line FQCN into top imports and sorts them (local script).'
+    commandLine 'python3', 'scripts/format_imports.py', '--format'
+}
+
+tasks.register('checkImports', Exec) {
+    group = 'verification'
+    description = 'Checks that no in-line FQCN exists in Java sources (local script).'
+    commandLine 'python3', 'scripts/format_imports.py', '--check'
+}
+
+// DataGen Language Files Generator Task
+tasks.register('generateLang', JavaExec) {
+    group = 'datagen'
+    description = 'Generates all i18n language files (zh_cn, zh_tw, en_us, en_gb) using LanguageDataGenTool.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'top.atdove.epithet.data.LanguageDataGenTool'
+    args = ['src/main/resources/assets/epithet/lang']
+}
