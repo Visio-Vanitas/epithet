@@ -22,6 +22,12 @@
 - 玩家数据通过 NeoForge Data Attachments 序列化存储，附带 `copyOnDeath()`，重生不丢失。
 - 管理员可强制锁定玩家称号，锁定状态下客户端无法自行更换或卸下。
 
+### 1.4 彩色线性渐变与动态流光波浪 (Gradients & Animated Waves)
+- **多色平滑线性渐变**：支持 `<gradient:#c1:#c2:...>文本</gradient>` 与 `<rainbow>文本</rainbow>`，按字符线性插值渲染。
+- **60/144 FPS 动态流光波浪**：支持 `<animated-gradient:...:speed=X>文本</animated-gradient>` 与 `<animated-rainbow:speed=X>文本</animated-rainbow>`。
+  - **头顶名牌与 GUI 实时刷新**：在客户端每帧渲染周期内，基于本地时间戳计算动态相位偏移，呈现丝滑平移的流动波浪。
+  - **零网络开销**：动态流光纯粹在客户端本地计算渲染，服务端不发送任何高频同步包，对服务器带宽与 TPS 零压力。
+
 ---
 
 ## 2. 界面与交互指南 (GUI)

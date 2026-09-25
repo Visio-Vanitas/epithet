@@ -3,6 +3,7 @@ package top.atdove.epithet.event;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -11,10 +12,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.OnDatapackSyncEvent;
 import net.neoforged.neoforge.event.entity.player.AdvancementEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 import top.atdove.epithet.attachment.ModAttachments;
 import top.atdove.epithet.attachment.PlayerTitleData;
 import top.atdove.epithet.config.EpithetConfig;
+import top.atdove.epithet.data.TitleSavedData;
 import top.atdove.epithet.network.TitleNetworkHandler;
 import top.atdove.epithet.title.TitleDefinition;
 import top.atdove.epithet.title.TitleRegistry;
@@ -134,6 +137,16 @@ public class TitleEventHandler {
             player.refreshDisplayName();
             player.refreshTabListName();
 
+            // Broadcast tab list display name update to all players
+            if (player.server != null) {
+                player.server.getPlayerList().broadcastAll(
+                        new ClientboundPlayerInfoUpdatePacket(
+                                ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
+                                player
+                        )
+                );
+            }
+
             // Sync to any existing trackers
             TitleNetworkHandler.syncToTrackers(player);
         }
@@ -179,5 +192,14 @@ public class TitleEventHandler {
                 TitleNetworkHandler.sendRegistry(player);
             }
         }
+    }
+
+    /**
+     * Initializes and loads dynamic world titles immediately after the server has started,
+     * ensuring persistent titles are retained across server restarts.
+     */
+    @SubscribeEvent
+    public static void onServerStarted(ServerStartedEvent event) {
+        TitleSavedData.get(event.getServer());
     }
 }

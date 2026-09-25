@@ -42,18 +42,24 @@ public record EquipTitlePayload(Optional<ResourceLocation> titleId) implements C
                 PlayerTitleData data = player.getData(ModAttachments.PLAYER_TITLE_DATA);
                 if (data.isLocked()) {
                     Epithet.LOGGER.warn("Player {} tried to equip title while locked", player.getName().getString());
+                    TitleNetworkHandler.syncPlayerTitle(player, player, true);
                     return;
                 }
                 if (payload.titleId().isEmpty()) {
                     data.setActiveTitle(Optional.empty());
-                    player.refreshDisplayName();
-                    player.refreshTabListName();
                     TitleNetworkHandler.syncToPlayerAndTrackers(player);
-                } else if (data.hasTitle(payload.titleId().get())) {
-                    data.setActiveTitle(payload.titleId());
-                    player.refreshDisplayName();
-                    player.refreshTabListName();
-                    TitleNetworkHandler.syncToPlayerAndTrackers(player);
+                } else {
+                    ResourceLocation id = payload.titleId().get();
+                    if (data.hasTitle(id) || player.hasPermissions(2)) {
+                        if (!data.hasTitle(id)) {
+                            data.unlockTitle(id);
+                        }
+                        data.setActiveTitle(payload.titleId());
+                        TitleNetworkHandler.syncToPlayerAndTrackers(player);
+                    } else {
+                        Epithet.LOGGER.warn("Player {} tried to equip unearned title: {}", player.getName().getString(), id);
+                        TitleNetworkHandler.syncPlayerTitle(player, player, true);
+                    }
                 }
             }
         });

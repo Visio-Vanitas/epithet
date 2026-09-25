@@ -71,16 +71,18 @@ public class PlayerTitlesManageScreen extends Screen {
         // Request fresh data from server
         PacketDistributor.sendToServer(new AdminActionPayload(this.targetUuid, "sync", ""));
 
-        // Top Lock Button
-        this.lockButton = Button.builder(Component.empty(), btn -> onToggleLock())
-                .bounds(this.width / 2 + 105, 14, 70, 20).build();
-        this.addRenderableWidget(this.lockButton);
-        updateLockButton();
-
-        // Search Box
+        // Search Box and responsive layout bounds
         int searchWidth = 150;
         int listWidth = Math.min(360, this.width - 20);
         int leftAlign = this.width / 2 - listWidth / 2;
+        int listRight = leftAlign + listWidth;
+        int lockBtnW = 70;
+
+        // Top Lock Button (bound to list right edge to prevent overflow)
+        this.lockButton = Button.builder(Component.empty(), btn -> onToggleLock())
+                .bounds(listRight - lockBtnW, 14, lockBtnW, 20).build();
+        this.addRenderableWidget(this.lockButton);
+        updateLockButton();
 
         this.searchBox = new EditBox(
                 this.font,
@@ -386,7 +388,11 @@ public class PlayerTitlesManageScreen extends Screen {
                 guiGraphics.drawString(font, titleDef.displayName(), textX, textY, 0xFFFFFF);
 
                 // Rarity Tag
-                Component rarityComp = Component.translatable("rarity.epithet." + titleDef.rarity().toLowerCase());
+                String rawRarity = titleDef.rarity();
+                String rarity = (rawRarity != null && !rawRarity.trim().isEmpty())
+                        ? rawRarity.trim().toLowerCase(Locale.ROOT)
+                        : "common";
+                Component rarityComp = Component.translatableWithFallback("rarity.epithet." + rarity, rarity);
                 int rarityX = textX + font.width(titleDef.displayName()) + 6;
                 guiGraphics.drawString(font, rarityComp, rarityX, textY, titleDef.color() != 0 ? titleDef.color() : 0xFFAA00);
 
@@ -466,7 +472,11 @@ public class PlayerTitlesManageScreen extends Screen {
                 guiGraphics.drawString(font, titleDef.displayName(), textX, textY, 0xFFFFFF);
 
                 // Rarity Tag
-                Component rarityComp = Component.translatable("rarity.epithet." + titleDef.rarity().toLowerCase());
+                String rawRarity = titleDef.rarity();
+                String rarity = (rawRarity != null && !rawRarity.trim().isEmpty())
+                        ? rawRarity.trim().toLowerCase(Locale.ROOT)
+                        : "common";
+                Component rarityComp = Component.translatableWithFallback("rarity.epithet." + rarity, rarity);
                 int rarityX = textX + font.width(titleDef.displayName()) + 6;
                 guiGraphics.drawString(font, rarityComp, rarityX, textY, titleDef.color() != 0 ? titleDef.color() : 0xFFAA00);
 

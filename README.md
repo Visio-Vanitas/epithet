@@ -24,7 +24,7 @@ Unlike traditional implementations that modify player prefixes via Scoreboard Te
 - **🖥️ Native Vanilla UI**: Features a collision-free pause menu shortcut (`PauseScreen`), a player title selection interface, and an admin CRUD management workbench.
 - **📦 Data-Driven & Advancement Unlocks**: Fully configurable via standard Datapacks (`data/<namespace>/titles/*.json`) with `/reload` hot reloading, plus automatic title unlocking mapped to vanilla advancements.
 - **🔒 Server-Authoritative Lock**: Administrators can lock a player's title slot, preventing client-side unequip or changes.
-- **🎨 Flexible Formatting**: Supports Hex colors (`#FFAA00`), formatting codes (`§6`), Minecraft color names, and configurable bracket styles.
+- **🎨 Gradients & Animated Waves**: Full support for Hex colors (`#FFAA00`), formatting codes (`§6`), static multi-color linear gradients (`<gradient:...>`), and 60/144 FPS smooth animated wave gradients (`<animated-gradient:...>`, `<animated-rainbow>`) with configurable bracket wrappers.
 
 ---
 

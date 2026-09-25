@@ -92,6 +92,22 @@ public class LanguageDataGenTool {
         m.put("gui.epithet.manage.empty_available", "该玩家已拥有全服所有可用称号");
         m.put("gui.epithet.manage.search_hint", "筛选称号...");
 
+        // Title Creation GUI
+        m.put("gui.epithet.button.create_title", "创建称号");
+        m.put("gui.epithet.create.title", "创建自定义称号");
+        m.put("gui.epithet.create.id_tooltip", "称号唯一标识符（命名空间:名称）");
+        m.put("gui.epithet.create.name_tooltip", "称号显示名称，支持文本、渐变色及动态流光标签");
+        m.put("gui.epithet.create.color_tooltip", "称号主颜色（十六进制代码，如 #FFAA00）");
+        m.put("gui.epithet.create.rarity_tooltip", "称号稀有度（common, uncommon, rare, epic, legendary）");
+        m.put("gui.epithet.create.button.save_and_equip", "保存并佩戴");
+        m.put("gui.epithet.create.button.save_only", "仅保存");
+        m.put("gui.epithet.create.label.id", "称号标识符 (ID)");
+        m.put("gui.epithet.create.label.name", "显示名称 (支持渐变色/动画)");
+        m.put("gui.epithet.create.label.desc", "称号描述 (Description)");
+        m.put("gui.epithet.create.label.color", "主色调 (Hex)");
+        m.put("gui.epithet.create.label.rarity", "稀有度 (Rarity)");
+        m.put("gui.epithet.create.preview_label", "实时预览");
+
         // Commands
         m.put("command.epithet.gui.opening", "正在打开称号界面...");
         m.put("command.epithet.list.empty", "你尚未拥有任何称号。");
@@ -176,6 +192,22 @@ public class LanguageDataGenTool {
         m.put("gui.epithet.manage.empty_available", "該玩家已擁有全服所有可用稱號");
         m.put("gui.epithet.manage.search_hint", "篩選稱號...");
 
+        // Title Creation GUI
+        m.put("gui.epithet.button.create_title", "建立稱號");
+        m.put("gui.epithet.create.title", "建立自訂稱號");
+        m.put("gui.epithet.create.id_tooltip", "稱號唯一識別碼（命名空間:名稱）");
+        m.put("gui.epithet.create.name_tooltip", "稱號顯示名稱，支援文字、漸變色及動態流光標籤");
+        m.put("gui.epithet.create.color_tooltip", "稱號主顏色（十六進位代碼，如 #FFAA00）");
+        m.put("gui.epithet.create.rarity_tooltip", "稱號稀有度（common, uncommon, rare, epic, legendary）");
+        m.put("gui.epithet.create.button.save_and_equip", "儲存並佩戴");
+        m.put("gui.epithet.create.button.save_only", "僅儲存");
+        m.put("gui.epithet.create.label.id", "稱號識別碼 (ID)");
+        m.put("gui.epithet.create.label.name", "顯示名稱 (支援漸變色/動畫)");
+        m.put("gui.epithet.create.label.desc", "稱號描述 (Description)");
+        m.put("gui.epithet.create.label.color", "主色調 (Hex)");
+        m.put("gui.epithet.create.label.rarity", "稀有度 (Rarity)");
+        m.put("gui.epithet.create.preview_label", "即時預覽");
+
         // Commands
         m.put("command.epithet.gui.opening", "正在開啟稱號介面...");
         m.put("command.epithet.list.empty", "你尚未擁有任何稱號。");
@@ -259,6 +291,22 @@ public class LanguageDataGenTool {
         m.put("gui.epithet.manage.empty_available", "This player already owns all available titles");
         m.put("gui.epithet.manage.search_hint", "Filter titles...");
 
+        // Title Creation GUI
+        m.put("gui.epithet.button.create_title", "Create Title");
+        m.put("gui.epithet.create.title", "Create Custom Title");
+        m.put("gui.epithet.create.id_tooltip", "Unique title identifier (namespace:path)");
+        m.put("gui.epithet.create.name_tooltip", "Title display name, supports plain text, gradients, and animated gradient tags");
+        m.put("gui.epithet.create.color_tooltip", "Primary title color (hex format, e.g. #FFAA00)");
+        m.put("gui.epithet.create.rarity_tooltip", "Title rarity (common, uncommon, rare, epic, legendary)");
+        m.put("gui.epithet.create.button.save_and_equip", "Save & Equip");
+        m.put("gui.epithet.create.button.save_only", "Save Only");
+        m.put("gui.epithet.create.label.id", "Title Identifier (ID)");
+        m.put("gui.epithet.create.label.name", "Display Name (Gradients/Anim)");
+        m.put("gui.epithet.create.label.desc", "Description");
+        m.put("gui.epithet.create.label.color", "Main Color (Hex)");
+        m.put("gui.epithet.create.label.rarity", "Rarity");
+        m.put("gui.epithet.create.preview_label", "Live Preview");
+
         // Commands
         m.put("command.epithet.gui.opening", "Opening title selection...");
         m.put("command.epithet.list.empty", "You have no unlocked titles.");
@@ -341,6 +389,22 @@ public class LanguageDataGenTool {
         m.put("gui.epithet.manage.empty_owned", "This player does not own any titles yet");
         m.put("gui.epithet.manage.empty_available", "This player already owns all available titles");
         m.put("gui.epithet.manage.search_hint", "Filter titles...");
+
+        // Title Creation GUI
+        m.put("gui.epithet.button.create_title", "Create Title");
+        m.put("gui.epithet.create.title", "Create Custom Title");
+        m.put("gui.epithet.create.id_tooltip", "Unique title identifier (namespace:path)");
+        m.put("gui.epithet.create.name_tooltip", "Title display name, supports plain text, gradients, and animated gradient tags");
+        m.put("gui.epithet.create.color_tooltip", "Primary title colour (hex format, e.g. #FFAA00)");
+        m.put("gui.epithet.create.rarity_tooltip", "Title rarity (common, uncommon, rare, epic, legendary)");
+        m.put("gui.epithet.create.button.save_and_equip", "Save & Equip");
+        m.put("gui.epithet.create.button.save_only", "Save Only");
+        m.put("gui.epithet.create.label.id", "Title Identifier (ID)");
+        m.put("gui.epithet.create.label.name", "Display Name (Gradients/Anim)");
+        m.put("gui.epithet.create.label.desc", "Description");
+        m.put("gui.epithet.create.label.color", "Main Colour (Hex)");
+        m.put("gui.epithet.create.label.rarity", "Rarity");
+        m.put("gui.epithet.create.preview_label", "Live Preview");
 
         // Commands
         m.put("command.epithet.gui.opening", "Opening title selection...");

@@ -4,6 +4,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -128,23 +129,49 @@ public class EpithetConfig {
         if (titleComponent == null || titleComponent.getString().isEmpty()) {
             return Component.empty();
         }
-        if (!CLIENT.wrapWithBrackets.get()) {
+
+        boolean wrapWithBrackets = !CLIENT_SPEC.isLoaded() || Boolean.TRUE.equals(CLIENT.wrapWithBrackets.get());
+        if (!wrapWithBrackets) {
             return titleComponent;
         }
 
+        String left = CLIENT_SPEC.isLoaded() && CLIENT.prefixBracket.get() != null ? CLIENT.prefixBracket.get() : "「";
+        String right = CLIENT_SPEC.isLoaded() && CLIENT.suffixBracket.get() != null ? CLIENT.suffixBracket.get() : "」";
+
         String raw = titleComponent.getString().trim();
-        // If already enclosed by brackets, do not double-wrap
+
+        // Dynamic brackets check: if already enclosed by configured brackets, do not double-wrap
+        if (!left.isEmpty() && !right.isEmpty()) {
+            if (raw.startsWith(left) && raw.endsWith(right)) {
+                return titleComponent;
+            }
+        } else if (!left.isEmpty() && raw.startsWith(left)) {
+            return titleComponent;
+        } else if (!right.isEmpty() && raw.endsWith(right)) {
+            return titleComponent;
+        }
+
+        // Common static brackets check: if already enclosed, do not double-wrap
         if ((raw.startsWith("「") && raw.endsWith("」"))
                 || (raw.startsWith("[") && raw.endsWith("]"))
                 || (raw.startsWith("【") && raw.endsWith("】"))
                 || (raw.startsWith("《") && raw.endsWith("》"))
-                || (raw.startsWith("(") && raw.endsWith(")"))) {
+                || (raw.startsWith("(") && raw.endsWith(")"))
+                || (raw.startsWith("{") && raw.endsWith("}"))
+                || (raw.startsWith("<") && raw.endsWith(">"))
+                || (raw.startsWith("『") && raw.endsWith("』"))
+                || (raw.startsWith("〈") && raw.endsWith("〉"))
+                || (raw.startsWith("〔") && raw.endsWith("〕"))
+                || (raw.startsWith("〖") && raw.endsWith("〗"))
+                || (raw.startsWith("〘") && raw.endsWith("〙"))
+                || (raw.startsWith("〚") && raw.endsWith("〛"))) {
             return titleComponent;
         }
 
-        String left = CLIENT.prefixBracket.get();
-        String right = CLIENT.suffixBracket.get();
-        return Component.literal(left).append(titleComponent).append(right);
+        Style style = titleComponent.getStyle();
+        return Component.literal(left).withStyle(style)
+                .append(titleComponent)
+                .append(Component.literal(right).withStyle(style));
     }
 
     /**
@@ -155,7 +182,8 @@ public class EpithetConfig {
             return Component.empty();
         }
         Component baseTitle = formatTitle(titleDef.getFormattedDisplayName());
-        if (!CLIENT.enableChatHoverTooltip.get()) {
+        boolean enableTooltip = !CLIENT_SPEC.isLoaded() || Boolean.TRUE.equals(CLIENT.enableChatHoverTooltip.get());
+        if (!enableTooltip) {
             return baseTitle;
         }
 

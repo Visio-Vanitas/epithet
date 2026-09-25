@@ -107,7 +107,12 @@ datapack_example/
 1. **字符串字面量 / 翻译键**：
    - 传入普通字符串时，底层通过 `Component.translatableWithFallback(str, str)` 加载。
    - 若资源包包含该键的本地化翻译（如 `title.server.vip`），则展示为对应语言；若无翻译，则原样回退展示为该字符串字面量。
-2. **复合组件对象**：
+2. **彩色渐变与动态流光标签 (Gradient & Animated Gradient Markup)**：
+   - 系统支持在字符串中直接声明平滑线性渐变及每帧流动的动态波浪流光（完全兼容客户端 60/144 FPS 高刷渲染，零网络通信开销）：
+     * **双色/多色静态平滑渐变**：`<gradient:#FF416C:#FF4B2B>文本</gradient>` 或 `<gradient:#FF0000:#00FF00:#0000FF>文本</gradient>`
+     * **动态波浪流光渐变**：`<animated-gradient:#FF416C:#FF4B2B:speed=6>文本</animated-gradient>`（支持 `:speed=X` 自定义流速）
+     * **静态与动态彩虹光谱**：`<rainbow>全彩传说</rainbow>`、`<animated-rainbow:speed=5>流动彩虹</animated-rainbow>`
+3. **复合组件对象**：
    - 传入原生 JSON Object 时，通过原版 `ComponentSerialization.CODEC` 解析。支持标准样式属性：`bold`, `italic`, `underlined`, `strikethrough`, `obfuscated`, `color`, `font`。
 
 ```json
@@ -166,6 +171,18 @@ datapack_example/
   "rarity": "rare",
   "defaultUnlocked": false,
   "advancement": "minecraft:nether/root"
+}
+```
+
+#### 范例 C：多色平滑线性渐变与动态流光波浪称号
+```json
+{
+  "id": "server:aurora_knight",
+  "displayName": "<animated-gradient:#00F260:#0575E6:#FF007F:speed=8>极光幻彩</animated-gradient>",
+  "description": "沐浴极光流光的高阶守护骑士，名牌与界面呈现丝滑动态波浪。",
+  "priority": 100,
+  "rarity": "legendary",
+  "defaultUnlocked": false
 }
 ```
 

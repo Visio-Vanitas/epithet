@@ -9,7 +9,7 @@ version = mod_version
 group = mod_group_id
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-neoforge-${minecraft_version}"
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -120,4 +120,23 @@ tasks.register('generateLang', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     mainClass = 'top.atdove.epithet.data.LanguageDataGenTool'
     args = ['src/main/resources/assets/epithet/lang']
+}
+
+// Dedicated Platform Build Tasks (Strictly Platform-Scoped Artifacts)
+tasks.register('buildFabricJar', Jar) {
+    group = 'build'
+    description = 'Assembles the standalone Fabric 1.21.1 mod jar.'
+    archiveBaseName = "${mod_id}-fabric-${minecraft_version}"
+    archiveVersion = mod_version
+    from(sourceSets.main.output) {
+        exclude('META-INF/neoforge.mods.toml')
+    }
+    from('fabric/src/main/resources')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.register('buildAllPlatforms') {
+    group = 'build'
+    description = 'Builds release jars strictly for each supported platform (NeoForge and Fabric).'
+    dependsOn 'jar', 'buildFabricJar'
 }
